@@ -39,7 +39,9 @@ datum2df <- function(datum,vars = c("gpp"),pfts = c(2,3,4,17),name = "ref"){
                   data.frame(var = vars[ivar],melt(matrix.tmp) %>% mutate(time = 1:length(matrix.tmp),pft = 18)))
     } else {
       if (vars[[ivar]] %in% c("agb.recr","recr")){
-        matrix.tmp <- datum$szpft[[vars[ivar]]][,2,pfts]
+        matrix.tmp <- (exp(datum$szpft[[vars[ivar]]][,2,pfts]) - 1.0) 
+      } else if (vars[[ivar]] %in% c("agb.mort","mort")) {
+        matrix.tmp <- (1.0 - exp(- datum$szpft[[vars[ivar]]][,12,pfts]))
       } else {
         matrix.tmp <- datum$szpft[[vars[ivar]]][,12,pfts]
       }
